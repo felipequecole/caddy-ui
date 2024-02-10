@@ -1,0 +1,26 @@
+version: "3"
+
+networks:
+  caddy_network:
+    name: caddy_network
+    driver: bridge
+services:
+  caddy:
+    image: caddy-cf:latest
+    build: ./caddy-cf
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 2019:2019 # API port
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./Caddyfiles:/etc/caddy/custom/:ro
+      - ./caddy/config:/config
+      - ./caddy/data:/data
+    environment:
+      EMAIL: felipequecole@gmail.com
+      LOG_FILE: /data/access.log
+    networks:
+      - caddy_network
