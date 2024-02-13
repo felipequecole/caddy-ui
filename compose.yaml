@@ -14,13 +14,14 @@ services:
       - 80:80
       - 443:443
       - 2019:2019 # API port
+      - 2015:2015 # General testing port
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./Caddyfiles:/etc/caddy/custom/:ro
-      - ./caddy/config:/config
-      - ./caddy/data:/data
+      - ./caddy-data/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy-data/caddy/config:/config
+      - ./caddy-data/caddy/data:/data
     environment:
       EMAIL: felipequecole@gmail.com
       LOG_FILE: /data/access.log
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--resume", "/config/caddy/autosave.json"]
     networks:
       - caddy_network
